@@ -9,15 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button Cam;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Cam = (Button)findViewById(R.id.btnCamScreen);
-        Cam.setOnClickListener(new View.OnClickListener() {
+        Button cam = findViewById(R.id.btnCamScreen);
+        cam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -27,5 +25,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
