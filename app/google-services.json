@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "729787466451",
+    "firebase_url": "https://scanmage.firebaseio.com",
+    "project_id": "scanmage",
+    "storage_bucket": "scanmage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729787466451:android:5b833622859f3991524a26",
+        "android_client_info": {
+          "package_name": "com.trailblazing.scanmage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729787466451-9ld83i6te18t5bufuq5md34b556t238e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trailblazing.scanmage",
+            "certificate_hash": "1104b971703267e437dcf943632dcca3a201f43a"
+          }
+        },
+        {
+          "client_id": "729787466451-4bqkbr4iudsaomamo4rvcqbd86n79qq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWZYeDd8E1VrNU3S00dodbMtW7HRgJrnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729787466451-4bqkbr4iudsaomamo4rvcqbd86n79qq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

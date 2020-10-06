@@ -3,4 +3,15 @@
     <string name="video_thumbnail">video_thumbnail</string>
     <string name="title_card">Title</string>
     <string name="date">Date</string>
+    <string name="logo">Logo</string>
+    <string name="scanmage">SCANMAGE</string>
+    <string name="phone_placeholder">Your Phone Number</string>
+    <string name="send_otp_note">We will send you a One time SMS message. Carrier rates may apply</string>
+    <string name="send_otp">SEND OTP</string>
+    <string name="verification_code">Verification code</string>
+    <string name="check_verification_note">Please type the verification code sent to</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="verify">VERIFY</string>
+
 </resources>
