@@ -13,5 +13,6 @@
     <string name="enter_otp">Enter OTP</string>
     <string name="enter_name">Enter Name</string>
     <string name="verify">VERIFY</string>
+    <string name="enter_email">Enter Email</string>
 
 </resources>

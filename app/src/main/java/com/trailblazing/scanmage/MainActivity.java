@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,5 +26,18 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        if (!PermissionUtil.areAllPermissionsGranted(MainActivity.this)) {
+            PermissionUtil.requestAllPermissions(MainActivity.this);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionUtil.PERMISSION_REQUEST_CODE) {
+            if (!PermissionUtil.areAllPermissionsGranted(MainActivity.this)) {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                PermissionUtil.showPermissionsRationale(MainActivity.this);
+            }
+        }
     }
 }

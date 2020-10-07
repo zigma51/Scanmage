@@ -10,7 +10,6 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-// from https://stackoverflow.com/questions/38872546/edit-text-for-otp-with-each-letter-in-separate-positions
 public class OtpEditText extends AppCompatEditText {
     private float mSpace = 24; //24 dp by default, space between the lines
     private float mNumChars = 4;

@@ -2,6 +2,7 @@ package com.trailblazing.scanmage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -17,8 +18,12 @@ import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.trailblazing.scanmage.model.User;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +34,12 @@ public class OtpVerificationActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private OtpEditText otpEditText;
     private EditText nameEditText;
+    private EditText emailEditText;
     String username;
+    String email;
+
+    private DatabaseReference mDatabase;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,10 @@ public class OtpVerificationActivity extends AppCompatActivity {
 
         otpEditText = findViewById(R.id.et_otp);
         nameEditText = findViewById(R.id.name);
+        emailEditText = findViewById(R.id.email);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
 
         TextView checkVerificationCode = findViewById(R.id.check_verification_note);
 
@@ -56,6 +70,8 @@ public class OtpVerificationActivity extends AppCompatActivity {
 
                 String otp = otpEditText.getText().toString();
                 username = nameEditText.getText().toString();
+                email = emailEditText.getText().toString();
+
 
                 if (otp.length() == 0 || otp.length() < 6) {
                     otpEditText.setError("Enter OTP!");
@@ -65,6 +81,16 @@ public class OtpVerificationActivity extends AppCompatActivity {
                 if (username.isEmpty() || username.length() < 4) {
                     nameEditText.setError("Please Enter your Name");
                     nameEditText.requestFocus();
+                    return;
+                }
+                if (email.isEmpty() || email.length() < 4) {
+                    emailEditText.setError("Please Enter your Name");
+                    emailEditText.requestFocus();
+                    return;
+                }
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    emailEditText.setError("Please enter a Valid Email Address!");
+                    emailEditText.requestFocus();
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
@@ -92,7 +118,11 @@ public class OtpVerificationActivity extends AppCompatActivity {
                     Intent intent = new Intent(OtpVerificationActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     OtpVerificationActivity.this.startActivity(intent);
-                    AppClass.getSP().edit().putString("username", username).apply();
+                    if (user != null) {
+                        mDatabase.child("users").child(user.getUid()).child("username").setValue(username);
+                        System.out.println(user.getUid());
+                        mDatabase.child("users").child(user.getUid()).child("email").setValue(email);
+                    }
                 } else {
                     Toast.makeText(OtpVerificationActivity.this,
                             task.getException().getMessage(),
