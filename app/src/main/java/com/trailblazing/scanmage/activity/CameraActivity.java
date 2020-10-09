@@ -1,4 +1,4 @@
-package com.trailblazing.scanmage;
+package com.trailblazing.scanmage.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.trailblazing.scanmage.R;
 
 
 public class CameraActivity extends AppCompatActivity {

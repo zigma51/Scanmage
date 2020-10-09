@@ -1,4 +1,4 @@
-package com.trailblazing.scanmage;
+package com.trailblazing.scanmage.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +23,8 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.trailblazing.scanmage.model.User;
+import com.trailblazing.scanmage.OtpEditText;
+import com.trailblazing.scanmage.R;
 
 import java.util.concurrent.TimeUnit;
 
@@ -88,7 +89,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
                     emailEditText.requestFocus();
                     return;
                 }
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     emailEditText.setError("Please enter a Valid Email Address!");
                     emailEditText.requestFocus();
                     return;
