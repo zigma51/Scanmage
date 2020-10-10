@@ -71,7 +71,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="15dp"
                 android:onClick="download_btn"
-                android:src="@drawable/ic_download" />
+                app:srcCompat="@drawable/ic_download" />
 
             <ImageView
                 android:id="@+id/share"
@@ -84,7 +84,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="15dp"
                 android:onClick="share_btn"
-                android:src="@drawable/ic_share" />
+                app:srcCompat="@drawable/ic_share" />
 
         </RelativeLayout>
 
