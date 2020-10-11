@@ -2,7 +2,8 @@ package com.trailblazing.scanmage.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.hardware.Camera;
+import android.hardware.*;
+import android.hardware.Camera.*;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 public class CustomCameraActivity extends AppCompatActivity {
     private Camera mCamera;
     private CameraPreview mCameraPreview;
+    private boolean flashmode = false;
 
     /** Called when the activity is first created. */
     @Override
@@ -46,10 +48,37 @@ public class CustomCameraActivity extends AppCompatActivity {
         preview.addView(mCameraPreview);
 
         Button captureButton = (Button) findViewById(R.id.button_capture);
+        Button flashButton = (Button) findViewById(R.id.button_flash);
+
+        // Continuous Auto focus
+        Camera.Parameters param = mCamera.getParameters();
+        List<String> focusModes = param.getSupportedFocusModes();
+        if (focusModes.contains(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            param.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        }
+
+        mCamera.setParameters(param);
+
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCamera.takePicture(null, null, mPicture);
+            }
+        });
+        flashButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Camera.Parameters param = mCamera.getParameters();
+                try {
+
+                    param.setFlashMode(!flashmode ? Parameters.FLASH_MODE_TORCH
+                            : Parameters.FLASH_MODE_OFF);
+                    mCamera.setParameters(param);
+                    flashmode = !flashmode;
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
             }
         });
     }
@@ -65,21 +94,14 @@ public class CustomCameraActivity extends AppCompatActivity {
         try {
             camera = Camera.open();
 
-            Camera.Parameters params = camera.getParameters();
-            List<String> flashModes = params.getSupportedFlashModes();
-            if (flashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-                params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-            }
-            camera.setParameters(params);
-
-
         } catch (Exception e) {
             // cannot get camera or does not exist
         }
         return camera;
     }
 
-   Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+
+    Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = getOutputMediaFile();
@@ -116,3 +138,4 @@ public class CustomCameraActivity extends AppCompatActivity {
         return mediaFile;
     }
 }
+
