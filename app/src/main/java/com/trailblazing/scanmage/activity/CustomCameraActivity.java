@@ -18,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
 import android.widget.Toast;
 
 //public class CustomCameraActivity extends AppCompatActivity {
@@ -62,6 +64,14 @@ public class CustomCameraActivity extends AppCompatActivity {
         Camera camera = null;
         try {
             camera = Camera.open();
+            Camera.Parameters params = camera.getParameters();
+            List<String> flashModes = params.getSupportedFlashModes();
+            if (flashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
+                params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+            }
+            camera.setParameters(params);
+
+
         } catch (Exception e) {
             // cannot get camera or does not exist
         }
