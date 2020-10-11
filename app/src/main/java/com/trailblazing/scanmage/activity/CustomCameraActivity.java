@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import android.widget.Toast;
 
 //public class CustomCameraActivity extends AppCompatActivity {
 //
@@ -79,29 +80,27 @@ public class CustomCameraActivity extends AppCompatActivity {
                 fos.write(data);
                 fos.close();
             } catch (FileNotFoundException e) {
+                Toast.makeText(CustomCameraActivity.this, "File not found", Toast.LENGTH_LONG).show();
 
             } catch (IOException e) {
+                Toast.makeText(CustomCameraActivity.this, "IO not found", Toast.LENGTH_LONG).show();
             }
         }
     };
 
     private static File getOutputMediaFile() {
         File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "MyCameraApp");
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Scanmage");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                Log.d("MyCameraApp", "failed to create directory");
+                Log.d("Scanmage", "failed to create directory");
                 return null;
             }
         }
         // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-                .format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                + "IMG_" + timeStamp + ".jpg");
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
 
         return mediaFile;
     }
