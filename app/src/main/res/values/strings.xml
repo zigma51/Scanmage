@@ -14,5 +14,6 @@
     <string name="enter_name">Enter Name</string>
     <string name="verify">VERIFY</string>
     <string name="enter_email">Enter Email</string>
+    <string name="captureimage">captureImage</string>
 
 </resources>

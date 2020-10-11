@@ -52,12 +52,7 @@ public class PermissionUtil {
                     }
                 })
                 .setCancelable(false)
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        activity.finish();
-                    }
-                });
+                .setNegativeButton("No", (dialog, which) -> activity.finish());
         adb.create().show();
     }
 }

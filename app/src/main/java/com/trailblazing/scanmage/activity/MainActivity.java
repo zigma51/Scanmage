@@ -8,6 +8,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.trailblazing.scanmage.PermissionUtil;
@@ -35,29 +38,19 @@ public class MainActivity extends AppCompatActivity {
         fromBottomAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.from_bottom_anim);
         toBottomAnim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.to_bottom_anim);
 
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddButtonClicked();
-            }
-        });
+        fabAdd.setOnClickListener(v -> onAddButtonClicked());
 
-        fabCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Camera Button Clicked", Toast.LENGTH_LONG).show();
-//              Start CustomCameraActivity
-                Intent intent = new Intent(MainActivity.this, CustomCameraActivity.class);
+        fabCamera.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), "android.permission.CAMERA") != PermissionChecker.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{"android.permission.CAMERA"}, 0);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
                 startActivity(intent);
             }
+//                Toast.makeText(MainActivity.this, "Camera Button Clicked", Toast.LENGTH_LONG).show();
         });
 
-        fabImport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Import Button Clicked", Toast.LENGTH_LONG).show();
-            }
-        });
+        fabImport.setOnClickListener(v -> Toast.makeText(MainActivity.this, "Import Button Clicked", Toast.LENGTH_LONG).show());
 
         if (!PermissionUtil.areAllPermissionsGranted(MainActivity.this)) {
             PermissionUtil.requestAllPermissions(MainActivity.this);
@@ -91,6 +84,4 @@ public class MainActivity extends AppCompatActivity {
             fabAdd.startAnimation(rotateCloseAnim);
         }
     }
-
-
 }
