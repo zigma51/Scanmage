@@ -64,6 +64,7 @@ public class CustomCameraActivity extends AppCompatActivity {
         Camera camera = null;
         try {
             camera = Camera.open();
+
             Camera.Parameters params = camera.getParameters();
             List<String> flashModes = params.getSupportedFlashModes();
             if (flashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
