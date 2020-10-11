@@ -149,8 +149,7 @@ public class CameraActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
-        }
-        return true;
+        }        return true;
     }
 
     @Override
