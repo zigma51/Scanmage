@@ -1,5 +1,6 @@
 package com.trailblazing.scanmage.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Camera Button Clicked", Toast.LENGTH_LONG).show();
+//              Start CustomCameraActivity
+                Intent intent = new Intent(MainActivity.this, CustomCameraActivity.class);
+                startActivity(intent);
             }
         });
 
