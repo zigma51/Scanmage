@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SortedList;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.annotations.NotNull;
@@ -56,7 +55,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         return new ViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.title.setText(new File(files.get(position).filePath).getName());
@@ -64,7 +62,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         String path = files.get(position).filePath;
         File file = new File(path);
         Uri imageUri = Uri.fromFile(file);
-        Glide.with(holder.itemView.getContext()).load(imageUri).into(holder.snapshot);
+        Glide.with(holder.itemView.getContext()).load(imageUri).centerCrop().into(holder.snapshot);
 
         holder.deleteBtn.setOnClickListener(v -> onDeleteListener.onDelete(files.get(position)));
 

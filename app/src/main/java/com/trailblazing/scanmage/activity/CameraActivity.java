@@ -1,10 +1,11 @@
 package com.trailblazing.scanmage.activity;
 
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
+import android.util.Size;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -29,7 +30,6 @@ import com.trailblazing.scanmage.model.ScannedFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -80,6 +80,10 @@ public class CameraActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    void onTouch(float a, float b) {
+
+    }
+
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
 
         Preview preview = new Preview.Builder()
@@ -103,8 +107,14 @@ public class CameraActivity extends AppCompatActivity {
             hdrImageCaptureExtender.enableExtension(cameraSelector);
         }
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
         final ImageCapture imageCapture = builder
                 .setTargetRotation(this.getWindowManager().getDefaultDisplay().getRotation())
+                .setTargetResolution(new Size(width, height))
                 .build();
 
         preview.setSurfaceProvider(mPreviewView.createSurfaceProvider());
