@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -30,20 +30,18 @@
                     android:id="@+id/snapshot"
                     android:layout_width="110dp"
                     android:layout_height="110dp"
-                    android:contentDescription="@string/video_thumbnail"
+                    android:contentDescription="@string/image_thumbnail"
                     tools:srcCompat="@tools:sample/avatars" />
 
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/videoTitle"
+                android:id="@+id/fileTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_toEndOf="@+id/thumbnail"
-                android:layout_toRightOf="@+id/thumbnail"
                 android:text="@string/title_card"
                 android:textColor="#000000"
                 android:textSize="18sp" />
@@ -52,10 +50,9 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/videoTitle"
+                android:layout_below="@+id/fileTitle"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/thumbnail"
-                android:layout_toRightOf="@+id/thumbnail"
                 android:text="@string/date"
                 android:textColor="#000000"
                 android:textSize="16sp" />
@@ -65,10 +62,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginBottom="15dp"
                 android:onClick="download_btn"
                 app:srcCompat="@drawable/ic_download" />
@@ -78,13 +73,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="70dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginBottom="15dp"
                 android:onClick="share_btn"
                 app:srcCompat="@drawable/ic_share" />
+
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="120dp"
+                android:layout_marginBottom="15dp"
+                android:onClick="delete_btn"
+                app:srcCompat="@drawable/ic_delete" />
 
         </RelativeLayout>
 

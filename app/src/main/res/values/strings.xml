@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Scanmage</string>
-    <string name="video_thumbnail">video_thumbnail</string>
     <string name="title_card">Title</string>
     <string name="date">Date</string>
     <string name="logo">Logo</string>
@@ -15,5 +14,9 @@
     <string name="verify">VERIFY</string>
     <string name="enter_email">Enter Email</string>
     <string name="captureimage">captureImage</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="image_thumbnail">image_thumbnail</string>
+    <string name="file_thumbnail">File Thumbnail</string>
 
 </resources>

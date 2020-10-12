@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.trailblazing.scanmage.FileListFragment;
 import com.trailblazing.scanmage.PermissionUtil;
 import com.trailblazing.scanmage.R;
 
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new FileListFragment())
+                .commit();
+
         fabAdd = findViewById(R.id.fab_add);
         fabCamera = findViewById(R.id.fab_camera);
         fabImport = findViewById(R.id.fab_import);
@@ -44,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), "android.permission.CAMERA") != PermissionChecker.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{"android.permission.CAMERA"}, 0);
             } else {
+                fabCamera.startAnimation(toBottomAnim);
+                fabImport.startAnimation(toBottomAnim);
+                fabAdd.startAnimation(rotateCloseAnim);
                 Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
                 startActivity(intent);
             }

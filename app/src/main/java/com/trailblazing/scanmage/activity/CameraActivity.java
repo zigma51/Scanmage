@@ -1,6 +1,7 @@
 package com.trailblazing.scanmage.activity;
 
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,8 +24,14 @@ import androidx.core.content.ContextCompat;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.trailblazing.scanmage.R;
+import com.trailblazing.scanmage.database.AppDatabase;
+import com.trailblazing.scanmage.model.ScannedFile;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -105,7 +112,15 @@ public class CameraActivity extends AppCompatActivity {
         Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis, imageCapture);
 
         captureImage.setOnClickListener(v -> {
-            File file = new File(getExternalFilesDir(null), String.format("image_%s.jpg", System.currentTimeMillis()));
+            ScannedFile image = new ScannedFile();
+            Date date = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            image.date = sdf.format(date);
+            String fileName = String.format("%s/%s", getExternalFilesDir("images"), String.format("image_%s.jpg", df.format(date)));
+            File file = new File(fileName);
+            image.filePath = fileName;
+            AppDatabase.getInstance(CameraActivity.this).filesDao().insert(image);
 
             ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
             imageCapture.takePicture(outputFileOptions, executor, new ImageCapture.OnImageSavedCallback() {
