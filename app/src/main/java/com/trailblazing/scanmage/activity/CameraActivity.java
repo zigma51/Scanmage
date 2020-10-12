@@ -2,7 +2,6 @@ package com.trailblazing.scanmage.activity;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Button;
@@ -149,7 +148,8 @@ public class CameraActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
-        }        return true;
+        }
+        return true;
     }
 
     @Override
