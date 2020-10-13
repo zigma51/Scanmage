@@ -6,17 +6,23 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Size;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
+import androidx.camera.core.CameraControl;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.FocusMeteringAction;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.MeteringPoint;
+import androidx.camera.core.MeteringPointFactory;
 import androidx.camera.core.Preview;
+import androidx.camera.core.SurfaceOrientedMeteringPointFactory;
 import androidx.camera.extensions.HdrImageCaptureExtender;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
@@ -80,10 +86,6 @@ public class CameraActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
-    void onTouch(float a, float b) {
-
-    }
-
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
 
         Preview preview = new Preview.Builder()
@@ -120,6 +122,7 @@ public class CameraActivity extends AppCompatActivity {
         preview.setSurfaceProvider(mPreviewView.createSurfaceProvider());
 
         Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis, imageCapture);
+        setUpTapToFocus(camera.getCameraControl(), height, width);
 
         captureImage.setOnClickListener(v -> {
             ScannedFile image = new ScannedFile();
@@ -149,6 +152,19 @@ public class CameraActivity extends AppCompatActivity {
                     error.printStackTrace();
                 }
             });
+        });
+    }
+
+    private void setUpTapToFocus(CameraControl cameraControl, float x, float y) {
+        mPreviewView.setOnTouchListener((v, event) -> {
+            if (event.getAction() != MotionEvent.ACTION_UP) {
+                return false;
+            }
+            MeteringPointFactory factory = new SurfaceOrientedMeteringPointFactory(x, y);
+            MeteringPoint point = factory.createPoint(event.getX(), event.getY());
+            FocusMeteringAction action = new FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF).build();
+            cameraControl.startFocusAndMetering(action);
+            return true;
         });
     }
 
