@@ -1,5 +1,6 @@
 package com.trailblazing.scanmage.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -140,7 +141,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
                 number,
                 60,
                 TimeUnit.SECONDS,
-                TaskExecutors.MAIN_THREAD,
+                (Activity) TaskExecutors.MAIN_THREAD,
                 mCallBack
         );
     }
