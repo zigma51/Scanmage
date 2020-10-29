@@ -1,13 +1,17 @@
 package com.trailblazing.scanmage.activity;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Size;
 import android.view.MotionEvent;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,12 +48,13 @@ import java.util.concurrent.Executors;
 
 public class CameraActivity extends AppCompatActivity {
 
-    private Executor executor = Executors.newSingleThreadExecutor();
-    private int REQUEST_CODE_PERMISSIONS = 1001;
+    private final Executor executor = Executors.newSingleThreadExecutor();
+    private final int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
 
     PreviewView mPreviewView;
     Button captureImage;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,7 @@ public class CameraActivity extends AppCompatActivity {
 
         mPreviewView = findViewById(R.id.cameraView);
         captureImage = findViewById(R.id.captureBtn);
+        imageView = findViewById(R.id.imagePreview);
 
         if (allPermissionsGranted()) {
             startCamera(); //start camera if permission has been granted by user
@@ -142,6 +148,13 @@ public class CameraActivity extends AppCompatActivity {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
+                            if (file.exists()) {
+//                                Toast.makeText(CameraActivity.this, "Inside If", Toast.LENGTH_SHORT).show();
+                                Bitmap bitmap = BitmapFactory.decodeFile(fileName);
+                                imageView.setImageBitmap(bitmap);
+                                imageView.setRotation(90);
+                                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                            }
                             Toast.makeText(CameraActivity.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -155,12 +168,12 @@ public class CameraActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpTapToFocus(CameraControl cameraControl, float x, float y) {
+    private void setUpTapToFocus(CameraControl cameraControl, float height, float width) {
         mPreviewView.setOnTouchListener((v, event) -> {
             if (event.getAction() != MotionEvent.ACTION_UP) {
                 return false;
             }
-            MeteringPointFactory factory = new SurfaceOrientedMeteringPointFactory(x, y);
+            MeteringPointFactory factory = new SurfaceOrientedMeteringPointFactory(height, width);
             MeteringPoint point = factory.createPoint(event.getX(), event.getY());
             FocusMeteringAction action = new FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF).build();
             cameraControl.startFocusAndMetering(action);

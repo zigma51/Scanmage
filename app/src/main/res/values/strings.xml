@@ -17,5 +17,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="image_thumbnail">image_thumbnail</string>
     <string name="file_thumbnail">File Thumbnail</string>
+    <string name="image_count">Image Count</string>
+    <string name="image_preview">Image Preview</string>
+    <string name="save_as_pdf_btn">Save as PDF</string>
+    <string name="file_name_hint">myfile.pdf</string>
 
 </resources>
