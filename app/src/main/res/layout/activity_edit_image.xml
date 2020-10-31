@@ -19,6 +19,7 @@
             android:background="@color/colorPrimary">
 
             <Button
+                android:id="@+id/close_editing"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="10dp"
@@ -30,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="50dp"
+                android:layout_marginHorizontal="60dp"
                 android:backgroundTint="@color/colorBackgroundLight"
                 android:ems="10"
                 android:gravity="center"
@@ -39,6 +40,18 @@
                 android:textColor="@color/colorBackgroundLight"
                 android:textColorHint="#DCDCDC"
                 android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_alignEnd="@id/file_name"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/colorBackgroundLight"
+
+                android:text=".pdf"
+                android:layout_alignParentBottom="true"
+                />
 
             <Button
                 android:id="@+id/save_pdf"

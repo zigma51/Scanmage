@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -34,6 +35,7 @@ public class EditImageActivity extends AppCompatActivity {
     ImageView editImageView;
     EditText pdfFileNameEditText;
     Button savePdfBtn;
+    Button closeEditing;
     Uri uri;
     File pdfFile;
     String fileName;
@@ -47,6 +49,9 @@ public class EditImageActivity extends AppCompatActivity {
         editImageView = findViewById(R.id.edit_image_view);
         pdfFileNameEditText = findViewById(R.id.file_name);
         savePdfBtn = findViewById(R.id.save_pdf);
+        closeEditing = findViewById(R.id.close_editing);
+
+        closeEditing.setOnClickListener(v -> finish());
 
         Intent intent = getIntent();
         fileName = intent.getStringExtra("filename");
@@ -75,7 +80,7 @@ public class EditImageActivity extends AppCompatActivity {
                 editImageView.setImageURI(result.getUri());
                 croppedFileName = fileName.substring(0, fileName.length() - 4) + "cropped.jpg";
                 File croppedFile = new File(croppedFileName);
-                FileOutputStream outStream = null;
+                FileOutputStream outStream;
                 BitmapDrawable draw = (BitmapDrawable) editImageView.getDrawable();
                 Bitmap bitmap = draw.getBitmap();
                 try {
@@ -105,18 +110,20 @@ public class EditImageActivity extends AppCompatActivity {
                         PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
                         document.open();
                         Image image = Image.getInstance(croppedFileName);
-                        float scalar = ((document.getPageSize().getWidth() - document.leftMargin()
-                                - document.rightMargin() - 0) / image.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
-                        image.scalePercent(scalar);
-                        image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+//                        float scalar = ((document.getPageSize().getWidth() - document.leftMargin()
+//                                - document.rightMargin() - 0) / image.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
+//                        image.scalePercent(scalar);
+//                        image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+                        document.setPageSize(new Rectangle(image.getScaledWidth(), image.getScaledHeight()));
+                        document.newPage();
+                        image.setAbsolutePosition(0, 0);
                         document.add(image);
                         document.close();
-
                         ScannedFile pdf = new ScannedFile();
                         pdf.date = sdf.format(date);
                         pdf.filePath = pdfName;
                         AppDatabase.getInstance(EditImageActivity.this).filesDao().insert(pdf);
-                        
+
                         Toast.makeText(this, "PDF saved Successfully!", Toast.LENGTH_SHORT).show();
                         finish();
                     } catch (Exception e) {

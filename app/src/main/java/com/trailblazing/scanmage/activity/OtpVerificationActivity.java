@@ -1,6 +1,5 @@
 package com.trailblazing.scanmage.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,38 +65,35 @@ public class OtpVerificationActivity extends AppCompatActivity {
         checkVerificationCode.setText("Please type the verification code sent\nto " + phonenumber);
 
 
-        findViewById(R.id.verify).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.verify).setOnClickListener(v -> {
 
-                String otp = otpEditText.getText().toString();
-                username = nameEditText.getText().toString();
-                email = emailEditText.getText().toString();
+            String otp = otpEditText.getText().toString();
+            username = nameEditText.getText().toString();
+            email = emailEditText.getText().toString();
 
 
-                if (otp.length() == 0 || otp.length() < 6) {
-                    otpEditText.setError("Enter OTP!");
-                    otpEditText.requestFocus();
-                    return;
-                }
-                if (username.isEmpty() || username.length() < 4) {
-                    nameEditText.setError("Please Enter your Name");
-                    nameEditText.requestFocus();
-                    return;
-                }
-                if (email.isEmpty() || email.length() < 4) {
-                    emailEditText.setError("Please Enter your Name");
-                    emailEditText.requestFocus();
-                    return;
-                }
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    emailEditText.setError("Please enter a Valid Email Address!");
-                    emailEditText.requestFocus();
-                    return;
-                }
-                progressBar.setVisibility(View.VISIBLE);
-                OtpVerificationActivity.this.verifyCode(otp);
+            if (otp.length() == 0 || otp.length() < 6) {
+                otpEditText.setError("Enter OTP!");
+                otpEditText.requestFocus();
+                return;
             }
+            if (username.isEmpty() || username.length() < 4) {
+                nameEditText.setError("Please Enter your Name");
+                nameEditText.requestFocus();
+                return;
+            }
+            if (email.isEmpty() || email.length() < 4) {
+                emailEditText.setError("Please Enter your Name");
+                emailEditText.requestFocus();
+                return;
+            }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailEditText.setError("Please enter a Valid Email Address!");
+                emailEditText.requestFocus();
+                return;
+            }
+            progressBar.setVisibility(View.VISIBLE);
+            OtpVerificationActivity.this.verifyCode(otp);
         });
 
     }

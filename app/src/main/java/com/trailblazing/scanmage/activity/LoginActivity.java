@@ -19,21 +19,18 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText phoneEditText = findViewById(R.id.phone);
 
-        findViewById(R.id.send_otp).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        findViewById(R.id.send_otp).setOnClickListener(v -> {
 
-                String number = "+91" + phoneEditText.getText().toString().trim();
+            String number = "+91" + phoneEditText.getText().toString().trim();
 
-                if (number.length() < 10) {
-                    phoneEditText.setError("Please provide valid number!");
-                    phoneEditText.requestFocus();
-                }
-
-                Intent intent = new Intent(LoginActivity.this, OtpVerificationActivity.class);
-                intent.putExtra("phonenumber", number);
-                LoginActivity.this.startActivity(intent);
+            if (number.length() < 10) {
+                phoneEditText.setError("Please provide valid number!");
+                phoneEditText.requestFocus();
             }
+
+            Intent intent = new Intent(LoginActivity.this, OtpVerificationActivity.class);
+            intent.putExtra("phonenumber", number);
+            LoginActivity.this.startActivity(intent);
         });
     }
 

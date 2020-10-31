@@ -173,7 +173,7 @@ public class CameraActivity extends AppCompatActivity {
             if (event.getAction() != MotionEvent.ACTION_UP) {
                 return false;
             }
-            MeteringPointFactory factory = new SurfaceOrientedMeteringPointFactory(height, width);
+            MeteringPointFactory factory = new SurfaceOrientedMeteringPointFactory(width, height);
             MeteringPoint point = factory.createPoint(event.getX(), event.getY());
             FocusMeteringAction action = new FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF).build();
             cameraControl.startFocusAndMetering(action);

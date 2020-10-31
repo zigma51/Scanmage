@@ -20,7 +20,7 @@
     <string name="image_count">Image Count</string>
     <string name="image_preview">Image Preview</string>
     <string name="save_as_pdf_btn">Save as PDF</string>
-    <string name="file_name_hint">myfile.pdf</string>
+    <string name="file_name_hint">myfile</string>
     <string name="pdf_text_view">PDF</string>
 
 </resources>
