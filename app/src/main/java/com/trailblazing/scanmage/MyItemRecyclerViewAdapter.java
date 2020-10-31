@@ -1,6 +1,8 @@
 package com.trailblazing.scanmage;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     private List<ScannedFile> files;
     private OnClickListener onClickListener;
     private OnDeleteListener onDeleteListener;
+    private OnShareListener onShareListener;
 
     public MyItemRecyclerViewAdapter(Context context, List<ScannedFile> scannedFiles) {
         this.context = context;
@@ -36,9 +39,17 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         this.onDeleteListener = onDeleteListener;
     }
 
+    public void setOnShareListener(OnShareListener onShareListener) {
+        this.onShareListener = onShareListener;
+    }
+
 
     public interface OnDeleteListener {
         void onDelete(ScannedFile myFile);
+    }
+
+    public interface OnShareListener {
+        void onShare(ScannedFile myFile);
     }
 
     public interface OnClickListener {
@@ -62,7 +73,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
         holder.downloadBtn.setOnClickListener(v -> Toast.makeText(context, "Download button clicked!", Toast.LENGTH_SHORT).show());
 
-        holder.shareBtn.setOnClickListener(v -> Toast.makeText(context, "Share button clicked!", Toast.LENGTH_SHORT).show());
+        holder.shareBtn.setOnClickListener(v -> onShareListener.onShare(files.get(position)));
     }
 
     @Override

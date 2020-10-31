@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         fabAdd.setOnClickListener(v -> onAddButtonClicked());
 
+
+
         fabCamera.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), "android.permission.CAMERA") != PermissionChecker.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{"android.permission.CAMERA"}, 0);

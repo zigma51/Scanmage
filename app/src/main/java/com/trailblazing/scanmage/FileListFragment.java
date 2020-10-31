@@ -1,6 +1,7 @@
 package com.trailblazing.scanmage;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -43,11 +44,27 @@ public class FileListFragment extends Fragment {
     private void refresh() {
         getFileList();
         fileAdapter = new MyItemRecyclerViewAdapter(getContext(), files);
-        fileAdapter.setOnDeleteListener(file -> {
+        fileAdapter.setOnDeleteListener((ScannedFile file) -> {
             File fileF = new File(file.filePath);
             fileF.delete();
             AppDatabase.getInstance(getContext()).filesDao().delete(file);
             refresh();
+        });
+
+        fileAdapter.setOnShareListener((ScannedFile file) -> {
+            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+            File fileWithinMyDir = new File(file.filePath);
+
+            if (fileWithinMyDir.exists()) {
+                intentShareFile.setType("application/pdf");
+                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.filePath));
+//                intentShareFile.putExtra(Intent.EXTRA_STREAM, file.filePath);
+
+                intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+                        "Sharing File...");
+
+                startActivity(Intent.createChooser(intentShareFile, "Share File"));
+            }
         });
 
         listFiles.setAdapter(fileAdapter);
