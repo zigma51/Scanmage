@@ -1,5 +1,6 @@
 package com.trailblazing.scanmage.activity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.Size;
 import android.view.MotionEvent;
 import android.widget.Button;
@@ -35,8 +35,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.trailblazing.scanmage.R;
-import com.trailblazing.scanmage.database.AppDatabase;
-import com.trailblazing.scanmage.model.ScannedFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -122,7 +120,7 @@ public class CameraActivity extends AppCompatActivity {
 
         final ImageCapture imageCapture = builder
                 .setTargetRotation(this.getWindowManager().getDefaultDisplay().getRotation())
-                .setTargetResolution(new Size(width, height))
+                .setTargetResolution(new Size(1200, 1600))
                 .build();
 
         preview.setSurfaceProvider(mPreviewView.createSurfaceProvider());
@@ -131,15 +129,10 @@ public class CameraActivity extends AppCompatActivity {
         setUpTapToFocus(camera.getCameraControl(), height, width);
 
         captureImage.setOnClickListener(v -> {
-            ScannedFile image = new ScannedFile();
             Date date = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-            image.date = sdf.format(date);
             String fileName = String.format("%s/%s", getExternalFilesDir("images"), String.format("image_%s.jpg", df.format(date)));
             File file = new File(fileName);
-            image.filePath = fileName;
-            AppDatabase.getInstance(CameraActivity.this).filesDao().insert(image);
 
             ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
             imageCapture.takePicture(outputFileOptions, executor, new ImageCapture.OnImageSavedCallback() {
@@ -154,6 +147,13 @@ public class CameraActivity extends AppCompatActivity {
                                 imageView.setImageBitmap(bitmap);
                                 imageView.setRotation(90);
                                 imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+                                imageView.setOnClickListener(v1 -> {
+                                    Intent intent = new Intent(CameraActivity.this, EditImageActivity.class);
+                                    intent.putExtra("filename", fileName);
+                                    startActivity(intent);
+                                    finish();
+                                });
                             }
                             Toast.makeText(CameraActivity.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
                         }

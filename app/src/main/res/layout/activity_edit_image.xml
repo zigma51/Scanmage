@@ -26,7 +26,7 @@
                 android:background="@drawable/ic_close" />
 
             <EditText
-                android:id="@+id/fileName"
+                android:id="@+id/file_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -36,10 +36,12 @@
                 android:gravity="center"
                 android:hint="@string/file_name_hint"
                 android:inputType="text"
-                android:textColorHint="@color/colorBackgroundLight"
+                android:textColor="@color/colorBackgroundLight"
+                android:textColorHint="#DCDCDC"
                 android:textSize="20sp" />
 
             <Button
+                android:id="@+id/save_pdf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -63,18 +65,18 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/image_card"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="60dp"
                 android:src="@drawable/image_preview"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="2dp"
                 app:cardElevation="5dp">
 
                 <ImageView
                     android:id="@+id/edit_image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/image_preview" />
 
             </androidx.cardview.widget.CardView>
@@ -85,11 +87,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="46"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            android:gravity="center">
 
+            <ImageView
+                android:id="@+id/crop_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_crop" />
 
         </RelativeLayout>
-
 
     </LinearLayout>
 

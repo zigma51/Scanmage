@@ -15,8 +15,6 @@ import com.trailblazing.scanmage.model.ScannedFile;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;

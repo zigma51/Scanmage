@@ -23,14 +23,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginVertical="15dp"
-                app:cardCornerRadius="5dp"
+                app:cardBackgroundColor="#F40F02"
+                app:cardCornerRadius="10dp"
                 app:cardElevation="5dp">
 
-                <ImageView
+                <TextView
                     android:id="@+id/snapshot"
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:contentDescription="@string/image_thumbnail"
+                    android:gravity="center"
+                    android:letterSpacing="0.2"
+                    android:text="@string/pdf_text_view"
+                    android:textColor="@color/colorBackgroundLight"
+                    android:textSize="30sp"
                     tools:srcCompat="@tools:sample/avatars" />
 
             </androidx.cardview.widget.CardView>

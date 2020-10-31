@@ -1,7 +1,6 @@
 package com.trailblazing.scanmage;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.database.annotations.NotNull;
 import com.trailblazing.scanmage.model.ScannedFile;
 
@@ -59,10 +57,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.title.setText(new File(files.get(position).filePath).getName());
         holder.date.setText(new File(files.get(position).date).getName());
-        String path = files.get(position).filePath;
-        File file = new File(path);
-        Uri imageUri = Uri.fromFile(file);
-        Glide.with(holder.itemView.getContext()).load(imageUri).centerCrop().into(holder.snapshot);
 
         holder.deleteBtn.setOnClickListener(v -> onDeleteListener.onDelete(files.get(position)));
 
@@ -79,7 +73,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView date;
-        public ImageView snapshot;
         public ImageView shareBtn;
         public ImageView downloadBtn;
         public ImageView deleteBtn;
@@ -88,7 +81,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             super(view);
             title = view.findViewById(R.id.fileTitle);
             date = view.findViewById(R.id.date);
-            snapshot = view.findViewById(R.id.snapshot);
             shareBtn = view.findViewById(R.id.share);
             downloadBtn = view.findViewById(R.id.download);
             deleteBtn = view.findViewById(R.id.delete);
