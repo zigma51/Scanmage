@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <!-- See table below.  The external-files-path DOES NOT require external storage permissions. -->
-    <!--    <external-files-path-->
-    <!--        name="videos"-->
-    <!--        path="videos" />-->
-
-    <!--Uncomment below to share the entire application specific directory -->
+    <cache-path
+        name="cache"
+        path="/" />
+    <external-files-path
+        name="files"
+        path="." />
     <external-path
-        name="all_dirs"
+        name="files"
         path="." />
 </paths>

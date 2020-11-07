@@ -1,12 +1,15 @@
 package com.trailblazing.scanmage;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,19 +54,25 @@ public class FileListFragment extends Fragment {
             refresh();
         });
 
-        fileAdapter.setOnShareListener((ScannedFile file) -> {
-            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-            File fileWithinMyDir = new File(file.filePath);
+        fileAdapter.setOnShareListener((ScannedFile scannedFile) -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
 
-            if (fileWithinMyDir.exists()) {
-                intentShareFile.setType("application/pdf");
-                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.filePath));
-//                intentShareFile.putExtra(Intent.EXTRA_STREAM, file.filePath);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
-                        "Sharing File...");
+            File file;
 
-                startActivity(Intent.createChooser(intentShareFile, "Share File"));
+            final long token = Binder.clearCallingIdentity();
+            try {
+                file = new File(scannedFile.filePath);
+                Uri uri = FileProvider.getUriForFile(getActivity().getApplicationContext()
+                        , "com.trailblazing.scanmage.provider", file);
+                intent.setDataAndType(uri, "application/pdf");
+                PackageManager pm = getActivity().getPackageManager();
+                if (intent.resolveActivity(pm) != null) {
+                    startActivity(intent);
+                }
+            } finally {
+                Binder.restoreCallingIdentity(token);
             }
         });
 
