@@ -62,14 +62,8 @@ public class FileListFragment extends Fragment {
     private void refresh() {
         getFileList();
         fileAdapter = new MyItemRecyclerViewAdapter(getContext(), files);
-        fileAdapter.setOnDeleteListener((ScannedFile file) -> {
-            File fileF = new File(file.filePath);
-            fileF.delete();
-            AppDatabase.getInstance(getContext()).filesDao().delete(file);
-            refresh();
-        });
 
-        fileAdapter.setOnShareListener((ScannedFile scannedFile) -> {
+        fileAdapter.setOnClickListener((ScannedFile scannedFile) -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
 
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -89,6 +83,31 @@ public class FileListFragment extends Fragment {
             } finally {
                 Binder.restoreCallingIdentity(token);
             }
+        });
+
+        fileAdapter.setOnDeleteListener((ScannedFile file) -> {
+            File fileF = new File(file.filePath);
+            fileF.delete();
+            AppDatabase.getInstance(getContext()).filesDao().delete(file);
+            refresh();
+        });
+
+        fileAdapter.setOnShareListener((ScannedFile scannedFile) -> {
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+//            File file;
+//
+
+            Uri path = FileProvider.getUriForFile(getActivity().getApplicationContext(), "com.trailblazing.scanmage.provider", new File(scannedFile.filePath));
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, path);
+            shareIntent.addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            shareIntent.setType("application/pdf");
+            startActivity(Intent.createChooser(shareIntent, "Share"));
+
         });
 
         listFiles.setAdapter(fileAdapter);

@@ -108,6 +108,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         holder.deleteBtn.setOnClickListener(v -> onDeleteListener.onDelete(files.get(position)));
 
         holder.shareBtn.setOnClickListener(v -> onShareListener.onShare(files.get(position)));
+
+        holder.itemView.setOnClickListener(v -> onClickListener.onClick(files.get(position)));
     }
 
     @Override
