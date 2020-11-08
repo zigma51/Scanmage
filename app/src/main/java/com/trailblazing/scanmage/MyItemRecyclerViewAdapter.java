@@ -1,14 +1,11 @@
 package com.trailblazing.scanmage;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,8 +68,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
         holder.deleteBtn.setOnClickListener(v -> onDeleteListener.onDelete(files.get(position)));
 
-        holder.downloadBtn.setOnClickListener(v -> Toast.makeText(context, "Download button clicked!", Toast.LENGTH_SHORT).show());
-
         holder.shareBtn.setOnClickListener(v -> onShareListener.onShare(files.get(position)));
     }
 
@@ -85,7 +80,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public TextView title;
         public TextView date;
         public ImageView shareBtn;
-        public ImageView downloadBtn;
         public ImageView deleteBtn;
 
         public ViewHolder(View view) {
@@ -93,7 +87,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             title = view.findViewById(R.id.fileTitle);
             date = view.findViewById(R.id.date);
             shareBtn = view.findViewById(R.id.share);
-            downloadBtn = view.findViewById(R.id.download);
             deleteBtn = view.findViewById(R.id.delete);
         }
     }

@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class EditImageActivity extends AppCompatActivity {
     ImageView imageView;
@@ -38,6 +39,7 @@ public class EditImageActivity extends AppCompatActivity {
     Button closeEditing;
     Uri uri;
     File pdfFile;
+    Uri fileUri;
     String fileName;
     String croppedFileName;
 
@@ -50,13 +52,18 @@ public class EditImageActivity extends AppCompatActivity {
         pdfFileNameEditText = findViewById(R.id.file_name);
         savePdfBtn = findViewById(R.id.save_pdf);
         closeEditing = findViewById(R.id.close_editing);
-
-        closeEditing.setOnClickListener(v -> finish());
-
         Intent intent = getIntent();
-        fileName = intent.getStringExtra("filename");
-        assert fileName != null;
-        File file = new File(fileName);
+
+        closeEditing.setOnClickListener(v -> {
+            Intent i = new Intent(EditImageActivity.this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        });
+
+        fileUri = intent.getParcelableExtra("file_uri");
+        assert fileUri != null;
+        File file = new File(Objects.requireNonNull(fileUri.getPath()));
+        fileName = file.getAbsolutePath().substring(1);
         editImageView.setImageURI(Uri.fromFile(file));
         imageView.setOnClickListener(v -> startCrop(Uri.fromFile(file)));
 
@@ -125,7 +132,9 @@ public class EditImageActivity extends AppCompatActivity {
                         AppDatabase.getInstance(EditImageActivity.this).filesDao().insert(pdf);
 
                         Toast.makeText(this, "PDF saved Successfully!", Toast.LENGTH_SHORT).show();
-                        finish();
+                        Intent i = new Intent(EditImageActivity.this, MainActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

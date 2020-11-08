@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -133,6 +134,7 @@ public class CameraActivity extends AppCompatActivity {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
             String fileName = String.format("%s/%s", getExternalFilesDir("images"), String.format("image_%s.jpg", df.format(date)));
             File file = new File(fileName);
+            Uri fileUri = Uri.fromFile(file);
 
             ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
             imageCapture.takePicture(outputFileOptions, executor, new ImageCapture.OnImageSavedCallback() {
@@ -142,7 +144,6 @@ public class CameraActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (file.exists()) {
-//                                Toast.makeText(CameraActivity.this, "Inside If", Toast.LENGTH_SHORT).show();
                                 Bitmap bitmap = BitmapFactory.decodeFile(fileName);
                                 imageView.setImageBitmap(bitmap);
                                 imageView.setRotation(90);
@@ -150,7 +151,7 @@ public class CameraActivity extends AppCompatActivity {
 
                                 imageView.setOnClickListener(v1 -> {
                                     Intent intent = new Intent(CameraActivity.this, EditImageActivity.class);
-                                    intent.putExtra("filename", fileName);
+                                    intent.putExtra("file_uri", fileUri);
                                     startActivity(intent);
                                     finish();
                                 });

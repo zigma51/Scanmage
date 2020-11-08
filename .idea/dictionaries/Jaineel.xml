@@ -4,10 +4,12 @@
       <w>camerax</w>
       <w>captureimage</w>
       <w>cardview</w>
+      <w>dropbox</w>
       <w>fileprovider</w>
       <w>hmmss</w>
       <w>phonenumber</w>
       <w>scanmage</w>
+      <w>selectedimage</w>
     </words>
   </dictionary>
 </component>

@@ -64,23 +64,12 @@
                 android:textSize="16sp" />
 
             <ImageView
-                android:id="@+id/download"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="15dp"
-                android:onClick="download_btn"
-                app:srcCompat="@drawable/ic_download" />
-
-            <ImageView
                 android:id="@+id/share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="70dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
                 android:onClick="share_btn"
                 app:srcCompat="@drawable/ic_share" />
@@ -91,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="120dp"
+                android:layout_marginEnd="70dp"
                 android:layout_marginBottom="15dp"
                 android:onClick="delete_btn"
                 app:srcCompat="@drawable/ic_delete" />

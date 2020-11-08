@@ -22,5 +22,8 @@
     <string name="save_as_pdf_btn">Save as PDF</string>
     <string name="file_name_hint">myfile</string>
     <string name="pdf_text_view">PDF</string>
+    <string name="pdf_extension">.pdf</string>
+    <string name="selectedimage">selectedImage</string>
+    <string name="crop_icon">Crop Icon</string>
 
 </resources>
