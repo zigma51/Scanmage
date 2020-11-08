@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ public class FileListFragment extends Fragment {
     private RecyclerView listFiles;
     private MyItemRecyclerViewAdapter fileAdapter;
     List<ScannedFile> files = new ArrayList<>();
+    private SearchView searchFiles;
 
     public FileListFragment() {
         super(R.layout.fragment_file_list);
@@ -39,6 +41,19 @@ public class FileListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         listFiles = view.findViewById(R.id.fileList);
+        searchFiles = view.findViewById(R.id.search);
+        searchFiles.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                fileAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         listFiles.setLayoutManager(new LinearLayoutManager(getActivity()));
         refresh();
 

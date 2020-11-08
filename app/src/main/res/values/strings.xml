@@ -25,5 +25,7 @@
     <string name="pdf_extension">.pdf</string>
     <string name="selectedimage">selectedImage</string>
     <string name="crop_icon">Crop Icon</string>
-
+    <string name="add_image">Add Image</string>
+    <string name="open_camera">Open Camera</string>
+    <string name="import_image">Import Image</string>
 </resources>

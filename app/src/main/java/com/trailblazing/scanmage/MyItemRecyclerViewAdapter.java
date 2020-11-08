@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,11 +16,13 @@ import com.google.firebase.database.annotations.NotNull;
 import com.trailblazing.scanmage.model.ScannedFile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements Filterable {
     private Context context;
     private List<ScannedFile> files;
+    private List<ScannedFile> datasetFull;
     private OnClickListener onClickListener;
     private OnDeleteListener onDeleteListener;
     private OnShareListener onShareListener;
@@ -26,6 +30,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public MyItemRecyclerViewAdapter(Context context, List<ScannedFile> scannedFiles) {
         this.context = context;
         this.files = scannedFiles;
+        datasetFull = new ArrayList<>(scannedFiles);
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {
@@ -52,6 +57,40 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public interface OnClickListener {
         void onClick(ScannedFile myFile);
     }
+
+    @Override
+    public Filter getFilter() {
+        return datasetFilter;
+    }
+
+    private final Filter datasetFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<ScannedFile> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(datasetFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (ScannedFile scannedFile : datasetFull) {
+                    if ((new File(scannedFile.filePath).getName()).toLowerCase().contains(filterPattern)) {
+                        filteredList.add(scannedFile);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            files.clear();
+            files.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     @NonNull
     @Override
