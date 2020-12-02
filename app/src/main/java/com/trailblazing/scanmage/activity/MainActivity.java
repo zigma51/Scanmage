@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
@@ -25,6 +26,7 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton fabAdd, fabCamera, fabImport;
+    Toolbar toolbar;
 
     private Animation rotateOpenAnim, rotateCloseAnim, fromBottomAnim, toBottomAnim;
 
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, new FileListFragment())

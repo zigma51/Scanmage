@@ -1,10 +1,14 @@
 package com.trailblazing.scanmage;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 
@@ -15,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.trailblazing.scanmage.activity.LoginActivity;
 import com.trailblazing.scanmage.database.AppDatabase;
 import com.trailblazing.scanmage.model.ScannedFile;
 
@@ -39,7 +45,7 @@ public class FileListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        setHasOptionsMenu(true);
         listFiles = view.findViewById(R.id.fileList);
         searchFiles = view.findViewById(R.id.search);
         searchFiles.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -86,19 +92,20 @@ public class FileListFragment extends Fragment {
         });
 
         fileAdapter.setOnDeleteListener((ScannedFile file) -> {
-            File fileF = new File(file.filePath);
-            fileF.delete();
-            AppDatabase.getInstance(getContext()).filesDao().delete(file);
-            refresh();
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setTitle("Delete PDF");
+            alert.setMessage("Are you sure you want to delete?");
+            alert.setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                File fileF = new File(file.filePath);
+                fileF.delete();
+                AppDatabase.getInstance(getContext()).filesDao().delete(file);
+                refresh();
+            });
+            alert.setNegativeButton(android.R.string.no, (dialog, which) -> dialog.cancel());
+            alert.show();
         });
 
         fileAdapter.setOnShareListener((ScannedFile scannedFile) -> {
-//            Intent intent = new Intent(Intent.ACTION_VIEW);
-//            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//
-//            File file;
-//
-
             Uri path = FileProvider.getUriForFile(getActivity().getApplicationContext(), "com.trailblazing.scanmage.provider", new File(scannedFile.filePath));
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
@@ -107,9 +114,7 @@ public class FileListFragment extends Fragment {
                     Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             shareIntent.setType("application/pdf");
             startActivity(Intent.createChooser(shareIntent, "Share"));
-
         });
-
         listFiles.setAdapter(fileAdapter);
     }
 
@@ -131,5 +136,24 @@ public class FileListFragment extends Fragment {
                 refresh();
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbar_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
