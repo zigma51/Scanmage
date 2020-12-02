@@ -57,6 +57,8 @@ public class EditImageActivity extends AppCompatActivity {
         savePdfBtn = findViewById(R.id.save_pdf);
         closeEditing = findViewById(R.id.close_editing);
         Intent intent = getIntent();
+        Date date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
 
         closeEditing.setOnClickListener(v -> {
             Intent i = new Intent(EditImageActivity.this, MainActivity.class);
@@ -71,6 +73,40 @@ public class EditImageActivity extends AppCompatActivity {
         Glide.with(EditImageActivity.this)
                 .load(Uri.fromFile(file))
                 .into(editImageView);
+        savePdfBtn.setOnClickListener(v -> {
+            String pdfName = pdfFileNameEditText.getText().toString();
+            if (pdfName.isEmpty()) {
+                pdfFileNameEditText.setError("Enter valid name!");
+                pdfFileNameEditText.requestFocus();
+                return;
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            pdfName = String.format("%s/%s", getExternalFilesDir("documents"), String.format("%s_%s.pdf", pdfName, df.format(date)));
+            pdfFile = new File(pdfName);
+            Document document = new Document();
+            try {
+                PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+                document.open();
+                Image image = Image.getInstance(fileName);
+                image.setRotation(90);
+                document.setPageSize(new Rectangle(image.getWidth(), image.getHeight()));
+                document.newPage();
+                image.setAbsolutePosition(0, 0);
+                document.add(image);
+                document.close();
+                ScannedFile pdf = new ScannedFile();
+                pdf.date = sdf.format(date);
+                pdf.filePath = pdfName;
+                AppDatabase.getInstance(EditImageActivity.this).filesDao().insert(pdf);
+
+                Toast.makeText(this, "PDF saved Successfully!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(EditImageActivity.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         CropButtonImageView.setOnClickListener(v -> startCrop(Uri.fromFile(file)));
 
     }
@@ -122,7 +158,7 @@ public class EditImageActivity extends AppCompatActivity {
 
                 savePdfBtn.setOnClickListener(v -> {
                     String pdfName = pdfFileNameEditText.getText().toString();
-                    if (pdfName.isEmpty() || pdfName.length() <= 5) {
+                    if (pdfName.isEmpty()) {
                         pdfFileNameEditText.setError("Enter valid name!");
                         pdfFileNameEditText.requestFocus();
                         return;

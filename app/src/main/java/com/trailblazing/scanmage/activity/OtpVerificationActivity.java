@@ -1,8 +1,8 @@
 package com.trailblazing.scanmage.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.trailblazing.scanmage.OtpEditText;
 import com.trailblazing.scanmage.R;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class OtpVerificationActivity extends AppCompatActivity {
@@ -43,6 +44,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseUser user;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
 
         findViewById(R.id.verify).setOnClickListener(v -> {
 
-            String otp = otpEditText.getText().toString();
+            String otp = Objects.requireNonNull(otpEditText.getText()).toString();
             username = nameEditText.getText().toString();
             email = emailEditText.getText().toString();
 

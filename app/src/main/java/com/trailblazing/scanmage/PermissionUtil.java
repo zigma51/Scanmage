@@ -19,8 +19,6 @@ public class PermissionUtil {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.INTERNET,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
     };
 
     public static boolean areAllPermissionsGranted(Context context) {

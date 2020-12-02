@@ -150,7 +150,6 @@ public class CameraActivity extends AppCompatActivity {
                             imageView.setOnClickListener(v1 -> {
                                 Intent intent = new Intent(CameraActivity.this, EditImageActivity.class);
                                 intent.putExtra("file_uri", fileUri);
-                                intent.putExtra("from_gallery", false);
                                 startActivity(intent);
                                 finish();
                             });
