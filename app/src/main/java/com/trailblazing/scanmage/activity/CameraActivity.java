@@ -140,24 +140,22 @@ public class CameraActivity extends AppCompatActivity {
             imageCapture.takePicture(outputFileOptions, executor, new ImageCapture.OnImageSavedCallback() {
                 @Override
                 public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (file.exists()) {
-                                Bitmap bitmap = BitmapFactory.decodeFile(fileName);
-                                imageView.setImageBitmap(bitmap);
-                                imageView.setRotation(90);
-                                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (file.exists()) {
+                            Bitmap bitmap = BitmapFactory.decodeFile(fileName);
+                            imageView.setImageBitmap(bitmap);
+                            imageView.setRotation(90);
+                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
-                                imageView.setOnClickListener(v1 -> {
-                                    Intent intent = new Intent(CameraActivity.this, EditImageActivity.class);
-                                    intent.putExtra("file_uri", fileUri);
-                                    startActivity(intent);
-                                    finish();
-                                });
-                            }
-                            Toast.makeText(CameraActivity.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
+                            imageView.setOnClickListener(v1 -> {
+                                Intent intent = new Intent(CameraActivity.this, EditImageActivity.class);
+                                intent.putExtra("file_uri", fileUri);
+                                intent.putExtra("from_gallery", false);
+                                startActivity(intent);
+                                finish();
+                            });
                         }
+                        Toast.makeText(CameraActivity.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
                     });
                 }
 
@@ -180,21 +178,6 @@ public class CameraActivity extends AppCompatActivity {
             cameraControl.startFocusAndMetering(action);
             return true;
         });
-    }
-
-    public String getBatchDirectoryName() {
-
-        String app_folder_path = "";
-        for (File path : getExternalMediaDirs()) {
-            if (path.equals(new File("com.trailblazing.scanmage"))) {
-                return (path.toString());
-            }
-        }
-        File dir = new File("com.trailblazing.scanmage/images");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        return app_folder_path;
     }
 
     private boolean allPermissionsGranted() {

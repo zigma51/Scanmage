@@ -2,6 +2,7 @@ package com.trailblazing.scanmage.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -52,7 +53,6 @@ public class OtpVerificationActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.name);
         emailEditText = findViewById(R.id.email);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
         TextView checkVerificationCode = findViewById(R.id.check_verification_note);
@@ -62,7 +62,8 @@ public class OtpVerificationActivity extends AppCompatActivity {
         String phonenumber = getIntent().getStringExtra("phonenumber");
         sendVerificationCode(phonenumber);
 
-        checkVerificationCode.setText("Please type the verification code sent\nto " + phonenumber);
+        checkVerificationCode.setText("Please type the verification code sent\n" +
+                "to " + phonenumber);
 
 
         findViewById(R.id.verify).setOnClickListener(v -> {
@@ -113,14 +114,15 @@ public class OtpVerificationActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(OtpVerificationActivity.this, "Verified Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(OtpVerificationActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    OtpVerificationActivity.this.startActivity(intent);
+                    user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
                         mDatabase.child("users").child(user.getUid()).child("username").setValue(username);
                         System.out.println(user.getUid());
                         mDatabase.child("users").child(user.getUid()).child("email").setValue(email);
                     }
+                    Intent intent = new Intent(OtpVerificationActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    OtpVerificationActivity.this.startActivity(intent);
                 } else {
                     Toast.makeText(OtpVerificationActivity.this,
                             task.getException().getMessage(),
@@ -144,7 +146,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
     }
 
 
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBack =
+    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBack =
             new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 @Override
                 public void onCodeSent(
@@ -152,8 +154,8 @@ public class OtpVerificationActivity extends AppCompatActivity {
                         @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     super.onCodeSent(s, forceResendingToken);
                     verificationId = s;
-                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(OtpVerificationActivity.this, "OTP has been sent", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 @Override

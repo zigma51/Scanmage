@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -90,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
             File imageFile = new File(getRealPathFromURI(imageUri));
             Uri uri = Uri.fromFile(imageFile);
             Intent intent = new Intent(MainActivity.this, EditImageActivity.class);
+            Log.d("TAG", uri.toString());
             intent.putExtra("file_uri", uri);
+            intent.putExtra("from_gallery", true);
             startActivity(intent);
             finish();
         }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.LoginActivity">
 
     <LinearLayout
@@ -43,8 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/scanmage"
                 android:letterSpacing="0.2"
+                android:text="@string/scanmage"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="40sp" />
 
@@ -87,11 +88,10 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/progress_circular"
+        android:id="@+id/login_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
         android:visibility="gone" />
 
 </RelativeLayout>

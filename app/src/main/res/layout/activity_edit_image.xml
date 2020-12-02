@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginHorizontal="60dp"
+                android:paddingEnd="40dp"
                 android:backgroundTint="@color/colorBackgroundLight"
                 android:ems="10"
                 android:gravity="center"
@@ -74,13 +75,14 @@
             android:layout_height="match_parent"
             android:layout_weight="11"
             android:background="@color/cardview_dark_background"
-            android:gravity="center">
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="20dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/image_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/image_preview"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="5dp">
 

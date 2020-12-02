@@ -3,7 +3,7 @@ package com.trailblazing.scanmage.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,9 +11,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
@@ -32,7 +36,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class EditImageActivity extends AppCompatActivity {
-    ImageView imageView;
+    ImageView CropButtonImageView;
     ImageView editImageView;
     EditText pdfFileNameEditText;
     Button savePdfBtn;
@@ -47,7 +51,7 @@ public class EditImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_image);
-        imageView = findViewById(R.id.crop_btn);
+        CropButtonImageView = findViewById(R.id.crop_btn);
         editImageView = findViewById(R.id.edit_image_view);
         pdfFileNameEditText = findViewById(R.id.file_name);
         savePdfBtn = findViewById(R.id.save_pdf);
@@ -63,9 +67,11 @@ public class EditImageActivity extends AppCompatActivity {
         fileUri = intent.getParcelableExtra("file_uri");
         assert fileUri != null;
         File file = new File(Objects.requireNonNull(fileUri.getPath()));
-        fileName = file.getAbsolutePath().substring(1);
-        editImageView.setImageURI(Uri.fromFile(file));
-        imageView.setOnClickListener(v -> startCrop(Uri.fromFile(file)));
+        fileName = file.getPath();
+        Glide.with(EditImageActivity.this)
+                .load(Uri.fromFile(file))
+                .into(editImageView);
+        CropButtonImageView.setOnClickListener(v -> startCrop(Uri.fromFile(file)));
 
     }
 
@@ -83,23 +89,37 @@ public class EditImageActivity extends AppCompatActivity {
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            Date date = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
             if (resultCode == RESULT_OK) {
-                editImageView.setImageURI(result.getUri());
-                croppedFileName = fileName.substring(0, fileName.length() - 4) + "cropped.jpg";
-                File croppedFile = new File(croppedFileName);
-                FileOutputStream outStream;
-                BitmapDrawable draw = (BitmapDrawable) editImageView.getDrawable();
-                Bitmap bitmap = draw.getBitmap();
-                try {
-                    outStream = new FileOutputStream(croppedFile);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-                    outStream.flush();
-                    outStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Glide.with(EditImageActivity.this)
+                        .load(result.getUri())
+                        .into(editImageView);
 
-                Toast.makeText(this, "Cropped Successfully!", Toast.LENGTH_SHORT).show();
+                Glide.with(EditImageActivity.this).asBitmap().load(result.getUri()).into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        FileOutputStream outStream;
+                        croppedFileName = String.format("%s/%s", getExternalFilesDir("images")
+                                , String.format("%s_cropped_%s.jpg", fileName.substring(fileName.lastIndexOf("/"), fileName.lastIndexOf("."))
+                                        , df.format(date)));
+                        File croppedFile = new File(croppedFileName);
+                        try {
+                            outStream = new FileOutputStream(croppedFile);
+                            resource.compress(Bitmap.CompressFormat.JPEG, 75, outStream);
+                            outStream.flush();
+                            outStream.close();
+                            Toast.makeText(EditImageActivity.this, "Cropped Successfully!", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
+
                 savePdfBtn.setOnClickListener(v -> {
                     String pdfName = pdfFileNameEditText.getText().toString();
                     if (pdfName.isEmpty() || pdfName.length() <= 5) {
@@ -107,8 +127,6 @@ public class EditImageActivity extends AppCompatActivity {
                         pdfFileNameEditText.requestFocus();
                         return;
                     }
-                    Date date = new Date();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                     pdfName = String.format("%s/%s", getExternalFilesDir("documents"), String.format("%s_%s.pdf", pdfName, df.format(date)));
                     pdfFile = new File(pdfName);
@@ -117,11 +135,8 @@ public class EditImageActivity extends AppCompatActivity {
                         PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
                         document.open();
                         Image image = Image.getInstance(croppedFileName);
-//                        float scalar = ((document.getPageSize().getWidth() - document.leftMargin()
-//                                - document.rightMargin() - 0) / image.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
-//                        image.scalePercent(scalar);
-//                        image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
-                        document.setPageSize(new Rectangle(image.getScaledWidth(), image.getScaledHeight()));
+                        image.setRotation(90);
+                        document.setPageSize(new Rectangle(image.getWidth(), image.getHeight()));
                         document.newPage();
                         image.setAbsolutePosition(0, 0);
                         document.add(image);

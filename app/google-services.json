@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "729787466451-9ld83i6te18t5bufuq5md34b556t238e.apps.googleusercontent.com",
+          "client_id": "729787466451-lm78fu08b5bsgr3celt5i5bf4uebvvhc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.trailblazing.scanmage",
-            "certificate_hash": "1104b971703267e437dcf943632dcca3a201f43a"
+            "certificate_hash": "d27db4bf091e04f80cbb79fe9059ce3046b99ec5"
           }
         },
         {

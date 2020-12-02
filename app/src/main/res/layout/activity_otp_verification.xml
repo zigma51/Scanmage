@@ -5,14 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.OtpVerificationActivity">
 
-    <ProgressBar
-        android:id="@+id/progress_circular_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
-        android:visibility="gone" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -75,7 +67,7 @@
             android:background="@drawable/et_style"
             android:gravity="center"
             android:hint="@string/enter_name"
-            android:inputType="text"
+            android:inputType="textCapWords"
             android:paddingHorizontal="10dp"
             android:textColor="#FFFFFF"
             android:textColorHint="#D3D3D3"
@@ -112,5 +104,12 @@
             android:textSize="20sp" />
 
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_circular_2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>
